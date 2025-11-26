@@ -19,6 +19,7 @@ class MissaoVisaoSection extends StatelessWidget {
 
     return Container(
       color: const Color(0xFF061733), // fundo azul igual ao PDF
+      width: double.infinity,
       padding: EdgeInsets.symmetric(
         vertical: isMobile ? 40 : 80,
         horizontal: isMobile ? 20 : 80,

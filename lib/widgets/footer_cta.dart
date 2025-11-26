@@ -11,7 +11,9 @@ class FooterCTA extends StatelessWidget {
 
     return Container(
       color: AppColors.primaryBlue,
+      width: double.infinity,
       padding: EdgeInsets.symmetric(
+        
         vertical: isMobile ? 40 : 60,
         horizontal: isMobile ? 24 : 80,
       ),

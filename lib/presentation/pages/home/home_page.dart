@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:site_grupo_rmts/widgets/clients_section.dart';
 import 'package:site_grupo_rmts/widgets/contato_section.dart';
 import 'package:site_grupo_rmts/widgets/empresas_section.dart';
 import 'package:site_grupo_rmts/widgets/footer_cta.dart';
@@ -60,11 +61,12 @@ class _HomePageState extends State<HomePage> {
                   const HeroSection(),
                   QuemSomosSection(key: _quemSomosKey),
                   EmpresasSection(key: _empresasKey),
-                  PorQueSection(key: _clientesKey),
+                  PorQueSection(),
+                  ClientsSection(key: _clientesKey),
                   LocalizacaoSection(key: _localizacaoKey),
                   MissaoVisaoSection(),
                   TrabalheSection(key: _trabalheKey),
-                  ContatoSection(key: _contatoKey),
+                  // ContatoSection(key: _contatoKey),
                   const FooterCTA(),
                 ],
               ),

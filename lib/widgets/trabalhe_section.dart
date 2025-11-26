@@ -47,9 +47,18 @@ class TrabalheSection extends StatelessWidget {
           const SizedBox(width: 40, height: 40),
           Expanded(
             flex: isMobile ? 0 : 1,
-            child: Row(
+            child: Column(
+              spacing: 20,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                 ClipRRect(
+                   borderRadius: BorderRadius.circular(20),
+                   child: Image.asset(
+                     'assets/images/trabalhe_conosco.png',
+                     height: 360,
+                     fit: BoxFit.cover,
+                   ),
+                 ),
                 ElevatedButton.icon(
                   onPressed: () {
                     // abrir link de formulário (URL launcher no mobile/web)
