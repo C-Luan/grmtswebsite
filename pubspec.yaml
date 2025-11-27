@@ -8,7 +8,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  url_launcher: ^6.3.0
+  webviewx_plus: ^0.5.1
+  font_awesome_flutter: ^10.4.0
   # se quiser responsividade extra, dá para adicionar mais libs depois
 
 dev_dependencies:

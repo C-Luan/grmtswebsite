@@ -3,6 +3,7 @@ import 'package:site_grupo_rmts/widgets/clients_section.dart';
 import 'package:site_grupo_rmts/widgets/contato_section.dart';
 import 'package:site_grupo_rmts/widgets/empresas_section.dart';
 import 'package:site_grupo_rmts/widgets/footer_cta.dart';
+import 'package:site_grupo_rmts/widgets/footer_section.dart';
 import 'package:site_grupo_rmts/widgets/header.dart';
 import 'package:site_grupo_rmts/widgets/hero_section.dart';
 import 'package:site_grupo_rmts/widgets/localizacao_section.dart';
@@ -63,11 +64,12 @@ class _HomePageState extends State<HomePage> {
                   EmpresasSection(key: _empresasKey),
                   PorQueSection(),
                   ClientsSection(key: _clientesKey),
-                  LocalizacaoSection(key: _localizacaoKey),
+                  // LocalizacaoSection(key: _localizacaoKey),
                   MissaoVisaoSection(),
                   TrabalheSection(key: _trabalheKey),
                   // ContatoSection(key: _contatoKey),
                   const FooterCTA(),
+                  FoorterSection(key: _contatoKey,),
                 ],
               ),
             ),

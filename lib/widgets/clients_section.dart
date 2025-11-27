@@ -66,7 +66,7 @@ class _ClientsSectionState extends State<ClientsSection>
       width: double.infinity,
       padding: EdgeInsets.symmetric(
         vertical: 60,
-        horizontal: isMobile ? 16 : 160,
+        horizontal: isMobile ? 16 : 0,
       ),
       child: Column(
         children: [
@@ -95,7 +95,7 @@ class _ClientsSectionState extends State<ClientsSection>
                 itemBuilder: (context, index) {
                   return _HoverLogo(
                     imagePath: duplicatedLogos[index],
-                    width: isMobile ? 120 : 160,
+                    width: isMobile ? 160 : 240,
                   );
                 },
               ),
@@ -129,7 +129,7 @@ class _HoverLogoState extends State<_HoverLogo> {
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 320),
         curve: Curves.easeOut,
         child: ColorFiltered(
           colorFilter: _hovering
