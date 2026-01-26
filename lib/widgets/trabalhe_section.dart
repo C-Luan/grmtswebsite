@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/responsive.dart';
 
@@ -62,6 +63,8 @@ class TrabalheSection extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     // abrir link de formulário (URL launcher no mobile/web)
+                    Uri uri = Uri.parse('https://forms.gle/z2BznGDvkgoyBEw87');
+                    launchUrl(uri);
                   },
                   icon: const Icon(Icons.cloud_upload_outlined),
                   label: const Text('Cadastrar Currículo'),

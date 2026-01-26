@@ -1,7 +1,7 @@
 name: site_grupo_rmts
 description: Site institucional Grupo RMTS em Flutter Web
 publish_to: "none"
-
+version: 1.0.2+1
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
@@ -11,6 +11,8 @@ dependencies:
   url_launcher: ^6.3.0
   webviewx_plus: ^0.5.1
   font_awesome_flutter: ^10.4.0
+  webview_flutter: ^4.7.0
+
   # se quiser responsividade extra, dá para adicionar mais libs depois
 
 dev_dependencies:

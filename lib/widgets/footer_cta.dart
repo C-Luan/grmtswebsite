@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/responsive.dart';
 
@@ -32,8 +33,13 @@ class FooterCTA extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () {
-              // pode rolar até contato
+            onPressed: () async {
+            const phoneNumber = '5591985320555';
+                    final uri = Uri.parse('https://wa.me/$phoneNumber');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
+                    }
             },
             child: const Text('SOLICITE SEU ORÇAMENTO'),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/responsive.dart';
 
@@ -23,8 +24,9 @@ class HeroSection extends StatelessWidget {
           Expanded(
             flex: isMobile ? 0 : 1,
             child: Column(
-              crossAxisAlignment:
-                  isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+              crossAxisAlignment: isMobile
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.start,
               children: [
                 Text(
                   'GRUPO RMTS',
@@ -46,8 +48,8 @@ class HeroSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 12.0),
                   decoration: BoxDecoration(
                     color: AppColors.accentRed,
                     borderRadius: BorderRadius.circular(6),
@@ -62,8 +64,13 @@ class HeroSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {
-                    // você pode linkar com a seção de contato se quiser
+                  onPressed: () async {
+                    const phoneNumber = '5591985320555';
+                    final uri = Uri.parse('https://wa.me/$phoneNumber');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
+                    }
                   },
                   child: const Text('SOLICITE SEU ORÇAMENTO'),
                 )
