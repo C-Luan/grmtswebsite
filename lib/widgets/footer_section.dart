@@ -47,13 +47,13 @@ class FoorterSection extends StatelessWidget {
     return Column(
       children: [
         Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/background.png'),
-              fit: BoxFit.cover,
-            ),
-            color: Colors.white,
-          ),
+          // decoration: const BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage('assets/images/background.png'),
+          //     fit: BoxFit.cover,
+          //   ),
+          //   color: Colors.white,
+          // ),
           padding: EdgeInsets.symmetric(
             vertical: isMobile ? 80 : 120,
             horizontal: isMobile ? 16 : 200,
@@ -215,6 +215,7 @@ class _HoverContactItemState extends State<HoverContactItem> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           transform: _hovering
+              // ignore: deprecated_member_use
               ? (Matrix4.identity()..scale(1.05))
               : Matrix4.identity(),
           curve: Curves.easeOut,
@@ -228,7 +229,9 @@ class _HoverContactItemState extends State<HoverContactItem> {
                 child: FaIcon(
                   widget.icon,
                   color: _hovering
+                      // ignore: deprecated_member_use
                       ? widget.color.withOpacity(0.9)
+                      // ignore: deprecated_member_use
                       : widget.color.withOpacity(0.7),
                   size: _hovering ? 20 : 18,
                 ),
@@ -241,6 +244,7 @@ class _HoverContactItemState extends State<HoverContactItem> {
                     fontSize: 15,
                     // fontFamily: GoogleFonts.metrophobic().fontFamily,
                     color: _hovering
+                        // ignore: deprecated_member_use
                         ? widget.color.withOpacity(0.9)
                         : Colors.black87,
                     fontWeight: _hovering ? FontWeight.w600 : FontWeight.normal,

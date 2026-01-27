@@ -26,6 +26,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
+        // ignore: deprecated_member_use
         fillColor: Colors.white.withOpacity(0.15),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

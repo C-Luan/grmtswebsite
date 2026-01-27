@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:site_grupo_rmts/widgets/clients_section.dart';
-import 'package:site_grupo_rmts/widgets/contato_section.dart';
 import 'package:site_grupo_rmts/widgets/empresas_section.dart';
 import 'package:site_grupo_rmts/widgets/footer_cta.dart';
 import 'package:site_grupo_rmts/widgets/footer_section.dart';
 import 'package:site_grupo_rmts/widgets/header.dart';
 import 'package:site_grupo_rmts/widgets/hero_section.dart';
-import 'package:site_grupo_rmts/widgets/localizacao_section.dart';
 import 'package:site_grupo_rmts/widgets/missao_visao_section.dart';
 import 'package:site_grupo_rmts/widgets/por_que_section.dart';
 import 'package:site_grupo_rmts/widgets/quem_somos_section.dart';
@@ -33,7 +31,8 @@ class _HomePageState extends State<HomePage> {
     final ctx = key.currentContext;
     if (ctx == null) return;
     final box = ctx.findRenderObject() as RenderBox;
-    final offset = box.localToGlobal(Offset.zero, ancestor: context.findRenderObject());
+    final offset =
+        box.localToGlobal(Offset.zero, ancestor: context.findRenderObject());
     _scrollController.animateTo(
       _scrollController.offset + offset.dy - 80, // 80 ~ altura do header
       duration: const Duration(milliseconds: 400),
@@ -64,12 +63,14 @@ class _HomePageState extends State<HomePage> {
                   EmpresasSection(key: _empresasKey),
                   PorQueSection(),
                   ClientsSection(key: _clientesKey),
-                  // LocalizacaoSection(key: _localizacaoKey),
+
                   MissaoVisaoSection(),
                   TrabalheSection(key: _trabalheKey),
                   // ContatoSection(key: _contatoKey),
                   const FooterCTA(),
-                  FoorterSection(key: _contatoKey,),
+                  FoorterSection(
+                    key: _contatoKey,
+                  ),
                 ],
               ),
             ),

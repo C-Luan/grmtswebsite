@@ -32,6 +32,7 @@ class HeroSection extends StatelessWidget {
                   'GRUPO RMTS',
                   style: TextStyle(
                     fontSize: 18,
+                    // ignore: deprecated_member_use
                     color: Colors.white.withOpacity(0.8),
                   ),
                 ),

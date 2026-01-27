@@ -121,6 +121,7 @@ class _ContatoSectionState extends State<ContatoSection> {
       decoration: InputDecoration(
         hintText: label,
         filled: true,
+        // ignore: deprecated_member_use
         fillColor: Colors.white.withOpacity(0.9),
       ),
     );

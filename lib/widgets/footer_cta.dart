@@ -44,13 +44,13 @@ class FooterCTA extends StatelessWidget {
             child: const Text('SOLICITE SEU ORÇAMENTO'),
           ),
           const SizedBox(height: 24),
-          Text(
-            '© ${DateTime.now().year} Grupo RMTS - Todos os direitos reservados.',
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
-            ),
-          )
+          // Text(
+          //   '© ${DateTime.now().year} Grupo RMTS - Todos os direitos reservados.',
+          //   style: const TextStyle(
+          //     color: Colors.white70,
+          //     fontSize: 12,
+          //   ),
+          // )
         ],
       ),
     );
