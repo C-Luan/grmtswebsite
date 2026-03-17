@@ -1,0 +1,1829 @@
+openapi: 3.0.0
+info:
+  title: Siged Backend API
+  version: 1.0.0
+  description: API documentation for the Siged Backend application
+servers:
+  - url: http://localhost:3001
+    description: Local server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # ─────────────────── AUTH ───────────────────
+    LoginRequest:
+      type: object
+      required:
+        - login
+        - senha
+      properties:
+        login:
+          type: string
+        senha:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        refreshToken:
+          type: string
+
+    # ─────────────────── COLABORADOR ───────────────────
+    Colaborador:
+      type: object
+      properties:
+        id:
+          type: integer
+        nomeCompleto:
+          type: string
+        nascimento:
+          type: string
+          format: date
+        funcao:
+          type: string
+        contratosId:
+          type: integer
+        idEmpresa:
+          type: integer
+
+    # ─────────────────── DESLIGAMENTO ───────────────────
+    Desligamento:
+      type: object
+      required:
+        - colaboradorId
+      properties:
+        colaboradorId:
+          type: integer
+        desligamento:
+          type: string
+          format: date-time
+        tipoDesligamento:
+          type: string
+        avisoPrevio:
+          type: string
+        motivoObservacoes:
+          type: string
+        devolucaoCracha:
+          type: boolean
+        baixaSistema:
+          type: boolean
+        devolucaoEpi:
+          type: boolean
+        entregaEquipamentos:
+          type: boolean
+
+    # ─────────────────── MATERIAL ENTREGUE ───────────────────
+    MaterialEntregue:
+      type: object
+      required:
+        - colaboradorId
+      properties:
+        colaboradorId:
+          type: integer
+        ca:
+          type: string
+        item:
+          type: string
+        tamanho:
+          type: string
+        quantidade:
+          type: integer
+        dataEntrega:
+          type: string
+          format: date-time
+        dataDevolucao:
+          type: string
+          format: date-time
+        alertaTime:
+          type: integer
+        assinaturaEntrega:
+          type: string
+          description: Assinatura digital/base64 da entrega
+        assinaturaDevolucao:
+          type: string
+          description: Assinatura digital/base64 da devolução
+
+    # ─────────────────── RONDA HISTÓRICO ───────────────────
+    RondaHistoricoItem:
+      type: object
+      required:
+        - colaboradorId
+        - idPostoRonda
+        - checkIn
+      properties:
+        colaboradorId:
+          type: integer
+        idPostoRonda:
+          type: string
+          format: uuid
+        checkIn:
+          type: string
+          format: date-time
+        lat:
+          type: number
+          format: double
+        long:
+          type: number
+          format: double
+
+    # ─────────────────── ADVERTÊNCIA ───────────────────
+    Advertencia:
+      type: object
+      required:
+        - dataOcorrencia
+        - ocorrencia
+        - colaboradorId
+      properties:
+        colaboradorId:
+          type: integer
+        dataOcorrencia:
+          type: string
+          format: date-time
+        ocorrencia:
+          type: string
+        observacao:
+          type: string
+        setor:
+          type: string
+
+    # ─────────────────── CONVOCAÇÃO ───────────────────
+    Convocacao:
+      type: object
+      required:
+        - data
+        - motivo
+        - colaboradorId
+        - setor
+      properties:
+        colaboradorId:
+          type: integer
+        data:
+          type: string
+          format: date-time
+        motivo:
+          type: string
+        setor:
+          type: string
+
+    # ─────────────────── SUSPENSÃO ───────────────────
+    Suspensao:
+      type: object
+      required:
+        - inicio
+        - fim
+        - motivo
+        - colaboradorId
+        - setor
+      properties:
+        colaboradorId:
+          type: integer
+        inicio:
+          type: string
+          format: date-time
+        fim:
+          type: string
+          format: date-time
+        motivo:
+          type: string
+        setor:
+          type: string
+
+    # ─────────────────── EXAME MÉDICO OCUPACIONAL ───────────────────
+    ExameOcupacional:
+      type: object
+      required:
+        - tipoAso
+        - dataExame
+        - apto
+        - colaboradorId
+        - medicoNome
+        - medicoCrm
+        - medicoUfCrm
+      properties:
+        tipoAso:
+          type: string
+          enum: [ADMISSIONAL, PERIODICO, DEMISSIONAL, RETORNO, MUDANCA_RISCO]
+        dataExame:
+          type: string
+          format: date-time
+        apto:
+          type: boolean
+        observacoes:
+          type: string
+        resultadoClinico:
+          type: string
+        medicoNome:
+          type: string
+        medicoCrm:
+          type: string
+        medicoUfCrm:
+          type: string
+        validade:
+          type: string
+          format: date-time
+        colaboradorId:
+          type: integer
+        encaminhamentoId:
+          type: integer
+        exameRealizados:
+          type: array
+          items:
+            type: object
+            properties:
+              codigoExame:
+                type: string
+              dataExame:
+                type: string
+                format: date-time
+              realizado:
+                type: boolean
+
+    # ─────────────────── CLÍNICA ───────────────────
+    ClinicaExame:
+      type: object
+      required:
+        - nomeClinica
+      properties:
+        nomeClinica:
+          type: string
+        endereco:
+          type: string
+        telefone:
+          type: string
+
+    # ─────────────────── ENCAMINHAMENTO ───────────────────
+    EncaminhamentoExame:
+      type: object
+      required:
+        - colaboradorId
+        - tipoExame
+        - clinicaId
+      properties:
+        colaboradorId:
+          type: integer
+        tipoExame:
+          type: string
+          enum: [ADMISSIONAL, PERIODICO, DEMISSIONAL, RETORNO, MUDANCA_RISCO]
+        clinicaId:
+          type: integer
+        descricao:
+          type: string
+        examesSolicitados:
+          type: array
+          items:
+            type: string
+
+    # ─────────────────── CERTIFICAÇÃO ───────────────────
+    Certificacao:
+      type: object
+      required:
+        - titulo
+        - emissao
+        - validade
+        - alertTime
+      properties:
+        titulo:
+          type: string
+        colaboradorId:
+          type: integer
+        emissao:
+          type: string
+          format: date-time
+        validade:
+          type: string
+          format: date-time
+        alertTime:
+          type: integer
+
+    # ─────────────────── CONTRATO DE SERVIÇO ───────────────────
+    ContratoServico:
+      type: object
+      required:
+        - colaboradorId
+        - tipoContratoId
+      properties:
+        colaboradorId:
+          type: integer
+        tipoContratoId:
+          type: integer
+        experiencia:
+          type: boolean
+        inicio:
+          type: string
+          format: date-time
+        fim:
+          type: string
+          format: date-time
+        conclusao:
+          type: string
+          format: date-time
+        isConcluido:
+          type: boolean
+
+    TipoContrato:
+      type: object
+      required:
+        - tipoContrato
+      properties:
+        tipoContrato:
+          type: string
+        dias:
+          type: integer
+        prorrogacao:
+          type: integer
+
+    # ─────────────────── RISCO OCUPACIONAL ───────────────────
+    RiscoOcupacional:
+      type: object
+      required:
+        - colaboradorId
+        - risco
+        - inicioVigencia
+      properties:
+        colaboradorId:
+          type: integer
+        risco:
+          type: string
+        inicioVigencia:
+          type: string
+          format: date-time
+        fimVigencia:
+          type: string
+          format: date-time
+        enviadoESocial:
+          type: boolean
+
+    # ─────────────────── CONTRACHEQUE ───────────────────
+    Contracheque:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        ano:
+          type: integer
+        mes:
+          type: integer
+        aberto_em:
+          type: string
+          format: date-time
+        assinado:
+          type: boolean
+        assinado_em:
+          type: string
+          format: date-time
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ══════════════════════════════════════════════
+  #  AUTH
+  # ══════════════════════════════════════════════
+  /login:
+    post:
+      summary: Autenticação de colaborador
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Token JWT gerado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Credenciais inválidas
+
+  /auth/refresh:
+    post:
+      summary: Renovar token JWT
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: Novo token gerado
+        "401":
+          description: Refresh token inválido
+
+  # ══════════════════════════════════════════════
+  #  COLABORADORES
+  # ══════════════════════════════════════════════
+  /colaborador:
+    post:
+      summary: Criar colaborador
+      tags:
+        - Colaboradores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Colaborador"
+      responses:
+        "200":
+          description: Colaborador criado com sucesso
+        "500":
+          description: Erro interno do servidor
+
+  /colaboradores:
+    get:
+      summary: Listar todos os colaboradores
+      tags:
+        - Colaboradores
+      responses:
+        "200":
+          description: Lista de colaboradores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Colaborador"
+
+  /colaboradores/por-contrato:
+    get:
+      summary: Buscar colaboradores por empresa e contrato
+      tags:
+        - Colaboradores
+      parameters:
+        - in: query
+          name: idEmpresa
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: idContrato
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de colaboradores filtrados
+        "400":
+          description: Parâmetros obrigatórios não informados
+
+  /putcolab/{id}:
+    put:
+      summary: Atualizar dados do colaborador
+      tags:
+        - Colaboradores
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Colaborador"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+        "500":
+          description: Erro interno do servidor
+
+  /putcentrocusto/{id}:
+    put:
+      summary: Atualizar centro de custo do colaborador
+      tags:
+        - Colaboradores
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                centroCustoId:
+                  type: integer
+      responses:
+        "200":
+          description: Atualizado com sucesso
+
+  /putfuncao/{id}:
+    put:
+      summary: Alterar função do colaborador
+      tags:
+        - Colaboradores
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                funcao:
+                  type: string
+      responses:
+        "200":
+          description: Atualizado com sucesso
+
+  /admissao/{id}:
+    put:
+      summary: Atualizar dados de admissão do colaborador
+      tags:
+        - Colaboradores
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                matricula:
+                  type: string
+                admicao:
+                  type: string
+                  format: date-time
+                salarioBase:
+                  type: number
+                vr:
+                  type: number
+                transporte:
+                  type: number
+      responses:
+        "200":
+          description: Dados de admissão atualizados
+
+  # ══════════════════════════════════════════════
+  #  EMPRESA
+  # ══════════════════════════════════════════════
+  /empresa:
+    get:
+      summary: Listar empresas
+      tags:
+        - Empresa
+      responses:
+        "200":
+          description: Lista de empresas
+
+  # ══════════════════════════════════════════════
+  #  CONTRATOS (Posto de Serviço)
+  # ══════════════════════════════════════════════
+  /contrato/:
+    post:
+      summary: Criar contrato (posto de serviço)
+      tags:
+        - Contratos
+      responses:
+        "201":
+          description: Contrato criado
+
+  /contrato/{idEmpresa}:
+    get:
+      summary: Listar contratos por empresa
+      tags:
+        - Contratos
+      parameters:
+        - in: path
+          name: idEmpresa
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de contratos da empresa
+
+  # ══════════════════════════════════════════════
+  #  EXAMES OCUPACIONAIS
+  # ══════════════════════════════════════════════
+  /exames:
+    post:
+      summary: Criar exame ocupacional
+      tags:
+        - Exames Ocupacionais
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExameOcupacional"
+      responses:
+        "201":
+          description: Exame criado
+        "400":
+          description: Campos obrigatórios faltando
+        "500":
+          description: Erro no servidor
+    get:
+      summary: Listar exames ocupacionais
+      tags:
+        - Exames Ocupacionais
+      responses:
+        "200":
+          description: Lista de exames
+
+  /exames/lote:
+    post:
+      summary: Criar múltiplos exames ocupacionais em lote
+      tags:
+        - Exames Ocupacionais
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/ExameOcupacional"
+      responses:
+        "201":
+          description: Exames criados em lote
+        "400":
+          description: Lista inválida
+        "500":
+          description: Erro no servidor
+
+  /exames/{id}:
+    get:
+      summary: Buscar exame por ID
+      tags:
+        - Exames Ocupacionais
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Exame encontrado
+    put:
+      summary: Atualizar exame ocupacional
+      tags:
+        - Exames Ocupacionais
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExameOcupacional"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir exame ocupacional
+      tags:
+        - Exames Ocupacionais
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  # ══════════════════════════════════════════════
+  #  CLÍNICAS
+  # ══════════════════════════════════════════════
+  /clinicas:
+    post:
+      summary: Criar clínica de exame
+      tags:
+        - Clínicas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClinicaExame"
+      responses:
+        "201":
+          description: Clínica criada
+        "400":
+          description: nomeClinica é obrigatório
+    get:
+      summary: Listar clínicas
+      tags:
+        - Clínicas
+      responses:
+        "200":
+          description: Lista de clínicas
+
+  /clinicas/{id}:
+    get:
+      summary: Buscar clínica por ID
+      tags:
+        - Clínicas
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Clínica encontrada
+        "404":
+          description: Não encontrada
+    put:
+      summary: Atualizar clínica
+      tags:
+        - Clínicas
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClinicaExame"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir clínica
+      tags:
+        - Clínicas
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  # ══════════════════════════════════════════════
+  #  ENCAMINHAMENTOS
+  # ══════════════════════════════════════════════
+  /encaminhamentos:
+    post:
+      summary: Criar encaminhamento de exame
+      tags:
+        - Encaminhamentos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EncaminhamentoExame"
+      responses:
+        "201":
+          description: Encaminhamento criado
+        "400":
+          description: Campos obrigatórios faltando
+    get:
+      summary: Listar encaminhamentos
+      tags:
+        - Encaminhamentos
+      responses:
+        "200":
+          description: Lista de encaminhamentos
+
+  /encaminhamentos/{id}:
+    get:
+      summary: Buscar encaminhamento por ID
+      tags:
+        - Encaminhamentos
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Encaminhamento encontrado
+        "404":
+          description: Não encontrado
+    delete:
+      summary: Excluir encaminhamento
+      tags:
+        - Encaminhamentos
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  # ══════════════════════════════════════════════
+  #  CERTIFICAÇÕES
+  # ══════════════════════════════════════════════
+  /certificacoes:
+    post:
+      summary: Criar certificação
+      tags:
+        - Certificações
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Certificacao"
+      responses:
+        "201":
+          description: Certificação criada
+        "400":
+          description: Campos obrigatórios faltando
+    get:
+      summary: Listar certificações
+      tags:
+        - Certificações
+      responses:
+        "200":
+          description: Lista de certificações
+
+  /certificacoes/{id}:
+    get:
+      summary: Buscar certificação por ID
+      tags:
+        - Certificações
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Certificação encontrada
+        "404":
+          description: Não encontrada
+    put:
+      summary: Atualizar certificação
+      tags:
+        - Certificações
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Certificacao"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir certificação
+      tags:
+        - Certificações
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  /certificacoes/concluir/{id}:
+    put:
+      summary: Marcar certificação como concluída
+      tags:
+        - Certificações
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Certificação concluída
+
+  # HISTÓRICO DE CERTIFICAÇÕES
+  /historicocertificacao:
+    post:
+      summary: Criar histórico de certificação
+      tags:
+        - Certificações
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                certificacaoId:
+                  type: integer
+                emissao:
+                  type: string
+                  format: date-time
+                validade:
+                  type: string
+                  format: date-time
+                alertTime:
+                  type: integer
+      responses:
+        "201":
+          description: Histórico criado
+
+  /historicocertificacao/getcursosprazo/{id}:
+    get:
+      summary: Buscar histórico de certificação por ID
+      tags:
+        - Certificações
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Histórico de certificação
+
+  # ══════════════════════════════════════════════
+  #  ADVERTÊNCIAS
+  # ══════════════════════════════════════════════
+  /advertencias:
+    post:
+      summary: Criar advertência
+      tags:
+        - Advertências
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Advertencia"
+      responses:
+        "201":
+          description: Advertência criada
+        "400":
+          description: Campos obrigatórios faltando
+    get:
+      summary: Listar advertências
+      tags:
+        - Advertências
+      parameters:
+        - in: query
+          name: colaboradorId
+          required: false
+          schema:
+            type: integer
+          description: Filtrar por colaborador
+      responses:
+        "200":
+          description: Lista de advertências
+
+  /advertencias/{uuid}:
+    get:
+      summary: Buscar advertência por UUID
+      tags:
+        - Advertências
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Advertência encontrada
+        "404":
+          description: Não encontrada
+    put:
+      summary: Atualizar advertência
+      tags:
+        - Advertências
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Advertencia"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir advertência
+      tags:
+        - Advertências
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  # ══════════════════════════════════════════════
+  #  CONVOCAÇÕES
+  # ══════════════════════════════════════════════
+  /convocacoes:
+    post:
+      summary: Criar convocação
+      tags:
+        - Convocações
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Convocacao"
+      responses:
+        "201":
+          description: Convocação criada
+        "400":
+          description: Campos obrigatórios faltando
+    get:
+      summary: Listar convocações
+      tags:
+        - Convocações
+      responses:
+        "200":
+          description: Lista de convocações
+
+  /convocacoes/{uuid}:
+    get:
+      summary: Buscar convocação por UUID
+      tags:
+        - Convocações
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Convocação encontrada
+        "404":
+          description: Não encontrada
+    put:
+      summary: Atualizar convocação
+      tags:
+        - Convocações
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Convocacao"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir convocação
+      tags:
+        - Convocações
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  # ══════════════════════════════════════════════
+  #  SUSPENSÕES
+  # ══════════════════════════════════════════════
+  /suspensoes:
+    post:
+      summary: Criar suspensão
+      tags:
+        - Suspensões
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Suspensao"
+      responses:
+        "201":
+          description: Suspensão criada
+        "400":
+          description: Campos obrigatórios faltando
+    get:
+      summary: Listar suspensões
+      tags:
+        - Suspensões
+      responses:
+        "200":
+          description: Lista de suspensões
+
+  /suspensoes/{uuid}:
+    get:
+      summary: Buscar suspensão por UUID
+      tags:
+        - Suspensões
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Suspensão encontrada
+        "404":
+          description: Não encontrada
+    put:
+      summary: Atualizar suspensão
+      tags:
+        - Suspensões
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Suspensao"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir suspensão
+      tags:
+        - Suspensões
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  # ══════════════════════════════════════════════
+  #  CONTRATOS DE SERVIÇO
+  # ══════════════════════════════════════════════
+  /contratos-servico:
+    post:
+      summary: Criar contrato de serviço
+      tags:
+        - Contratos de Serviço
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContratoServico"
+      responses:
+        "201":
+          description: Contrato criado
+        "400":
+          description: Campos obrigatórios faltando
+    get:
+      summary: Listar contratos de serviço
+      tags:
+        - Contratos de Serviço
+      responses:
+        "200":
+          description: Lista de contratos de serviço
+
+  /contratos-servico/tipos:
+    post:
+      summary: Criar tipo de contrato
+      tags:
+        - Contratos de Serviço
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TipoContrato"
+      responses:
+        "201":
+          description: Tipo de contrato criado
+    get:
+      summary: Listar tipos de contrato
+      tags:
+        - Contratos de Serviço
+      responses:
+        "200":
+          description: Lista de tipos de contrato
+
+  /contratos-servico/{id}:
+    get:
+      summary: Buscar contrato de serviço por ID
+      tags:
+        - Contratos de Serviço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Contrato encontrado
+        "404":
+          description: Não encontrado
+    put:
+      summary: Atualizar contrato de serviço
+      tags:
+        - Contratos de Serviço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContratoServico"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir contrato de serviço
+      tags:
+        - Contratos de Serviço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  # ══════════════════════════════════════════════
+  #  RISCOS OCUPACIONAIS
+  # ══════════════════════════════════════════════
+  /riscos-ocupacionais:
+    post:
+      summary: Criar risco ocupacional
+      tags:
+        - Riscos Ocupacionais
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RiscoOcupacional"
+      responses:
+        "201":
+          description: Risco criado
+        "400":
+          description: Campos obrigatórios faltando
+    get:
+      summary: Listar riscos ocupacionais
+      tags:
+        - Riscos Ocupacionais
+      responses:
+        "200":
+          description: Lista de riscos
+
+  /riscos-ocupacionais/{id}:
+    get:
+      summary: Buscar risco por ID
+      tags:
+        - Riscos Ocupacionais
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Risco encontrado
+    put:
+      summary: Atualizar risco ocupacional
+      tags:
+        - Riscos Ocupacionais
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RiscoOcupacional"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir risco ocupacional
+      tags:
+        - Riscos Ocupacionais
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  /riscos-ocupacionais/colaborador/{colaboradorId}:
+    get:
+      summary: Buscar riscos ocupacionais por colaborador
+      tags:
+        - Riscos Ocupacionais
+      parameters:
+        - in: path
+          name: colaboradorId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de riscos do colaborador
+
+  # ══════════════════════════════════════════════
+  #  DESLIGAMENTOS
+  # ══════════════════════════════════════════════
+  /desligamentos:
+    get:
+      summary: Listar todos os desligamentos
+      tags:
+        - Desligamento
+      responses:
+        "200":
+          description: Lista de desligamentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Desligamento"
+    post:
+      summary: Criar novo registro de desligamento
+      tags:
+        - Desligamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Desligamento"
+      responses:
+        "201":
+          description: Criado com sucesso
+        "400":
+          description: Erro de validação
+        "500":
+          description: Erro no servidor
+
+  /desligamentos/{id}:
+    get:
+      summary: Buscar desligamento por ID
+      tags:
+        - Desligamento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Registro de desligamento
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Desligamento"
+        "404":
+          description: Não encontrado
+    put:
+      summary: Atualizar registro de desligamento
+      tags:
+        - Desligamento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Desligamento"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+        "500":
+          description: Erro estrutural ou servidor
+    delete:
+      summary: Excluir registro de desligamento
+      tags:
+        - Desligamento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Excluído com sucesso
+
+  /desligamentos/colaborador/{colaboradorId}:
+    get:
+      summary: Buscar desligamentos de um colaborador específico
+      tags:
+        - Desligamento
+      parameters:
+        - in: path
+          name: colaboradorId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de desligamentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Desligamento"
+
+  # ══════════════════════════════════════════════
+  #  MATERIAIS ENTREGUES
+  # ══════════════════════════════════════════════
+  /materiais:
+    get:
+      summary: Listar materiais entregues
+      tags:
+        - Materiais Entregues
+      responses:
+        "200":
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MaterialEntregue"
+    post:
+      summary: Criar registro de material entregue
+      tags:
+        - Materiais Entregues
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaterialEntregue"
+      responses:
+        "201":
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaterialEntregue"
+        "400":
+          description: Parâmetro inválido
+
+  /materiais/{id}:
+    get:
+      summary: Buscar material entregue por ID
+      tags:
+        - Materiais Entregues
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaterialEntregue"
+    put:
+      summary: Atualizar material entregue
+      tags:
+        - Materiais Entregues
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaterialEntregue"
+      responses:
+        "200":
+          description: Atualizado com sucesso
+    delete:
+      summary: Excluir registro
+      tags:
+        - Materiais Entregues
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Sucesso
+
+  /materiais/colaborador/{colaboradorId}:
+    get:
+      summary: Buscar materiais pelo colaborador
+      tags:
+        - Materiais Entregues
+      parameters:
+        - in: path
+          name: colaboradorId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sucesso
+
+  # ══════════════════════════════════════════════
+  #  RONDA HISTÓRICO
+  # ══════════════════════════════════════════════
+  /rondahistorico:
+    post:
+      summary: Criar registros de ronda em lote
+      tags:
+        - Ronda Histórico
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/RondaHistoricoItem"
+      responses:
+        "201":
+          description: Inserido com sucesso
+        "400":
+          description: Erro na validação
+        "500":
+          description: Erro interno do servidor
+
+  /rondahistorico/relatorio:
+    get:
+      summary: Relatório de ronda
+      tags:
+        - Ronda Histórico
+      parameters:
+        - in: query
+          name: data_inicio
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Data inicial para o relatório
+        - in: query
+          name: data_fim
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Data final para o relatório
+        - in: query
+          name: colaboradorId
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: idPostoRonda
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: contratoId
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista dos registros de ronda no período
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RondaHistoricoItem"
+        "400":
+          description: Parâmetros obrigatórios não informados
+        "500":
+          description: Erro de servidor
+
+  # ══════════════════════════════════════════════
+  #  CONTRACHEQUES
+  # ══════════════════════════════════════════════
+  /contracheques:
+    get:
+      summary: Listar contracheques do colaborador autenticado
+      tags:
+        - Contracheques
+      responses:
+        "200":
+          description: Lista de contracheques
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contracheque"
+        "404":
+          description: Colaborador não encontrado
+
+  /contracheque/{uuid}:
+    get:
+      summary: Visualizar contracheque (PDF via nginx)
+      tags:
+        - Contracheques
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: PDF do contracheque
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        "403":
+          description: Sem permissão
+        "404":
+          description: Não encontrado
+
+  /contracheque/upload:
+    post:
+      summary: Upload de contracheques (arquivos PDF)
+      tags:
+        - Contracheques
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        "200":
+          description: Upload realizado com sucesso
+        "500":
+          description: Erro no servidor
+
+  /contracheque/{uuid}/assinar:
+    post:
+      summary: Assinar contracheque
+      tags:
+        - Contracheques
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Contracheque assinado com sucesso
+        "403":
+          description: Sem permissão
+        "404":
+          description: Não encontrado
+
+  # ══════════════════════════════════════════════
+  #  USUÁRIO
+  # ══════════════════════════════════════════════
+  /usuario/me:
+    get:
+      summary: Obter dados do usuário autenticado
+      tags:
+        - Usuário
+      responses:
+        "200":
+          description: Dados do usuário atual
+        "401":
+          description: Não autorizado
+
+  /usuarios:
+    get:
+      summary: Listar todos os usuários
+      tags:
+        - Usuário
+      responses:
+        "200":
+          description: Lista de usuários
+        "401":
+          description: Não autorizado

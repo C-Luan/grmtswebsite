@@ -31,6 +31,9 @@ class Header extends StatelessWidget {
       _HeaderItem(label: 'Trabalhe Conosco', onTap: onTrabalheTap),
       _HeaderItem(label: 'Localização', onTap: onLocalizacaoTap),
       _HeaderItem(label: 'Contato', onTap: onContatoTap),
+      _HeaderItem(label: 'Área do Colaborador', onTap: () {
+        Navigator.pushNamed(context, '/colaborador/login');
+      }),
     ];
 
     return Container(

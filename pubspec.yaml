@@ -3,7 +3,7 @@ description: Site institucional Grupo RMTS em Flutter Web
 publish_to: "none"
 version: 1.0.3+1
 environment:
-  sdk: 3.10.7
+  sdk: 3.11.1
 
 dependencies:
   flutter:
@@ -12,6 +12,13 @@ dependencies:
   webviewx_plus: ^0.5.1
   font_awesome_flutter: ^10.4.0
   webview_flutter: ^4.7.0
+  dio: ^5.9.2
+  flutter_dotenv: ^6.0.0
+  universal_html: ^2.3.0
+  mask_text_input_formatter: ^2.9.0
+  signature: ^5.5.0
+  intl: ^0.19.0
+  shared_preferences: ^2.5.2
 
   # se quiser responsividade extra, dá para adicionar mais libs depois
 
