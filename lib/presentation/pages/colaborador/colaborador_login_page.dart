@@ -62,13 +62,13 @@ class _ColaboradorLoginPageState extends State<ColaboradorLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0F1E),
+      backgroundColor: const Color(0xFFF3F4F6),
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
             center: Alignment.center,
             radius: 1.2,
-            colors: [Color(0xFF0F172A), Color(0xFF0A0F1E)],
+            colors: [Color(0xFFFFFFFF), Color(0xFFE5E7EB)],
           ),
         ),
         child: Center(
@@ -76,12 +76,12 @@ class _ColaboradorLoginPageState extends State<ColaboradorLoginPage> {
             width: 450,
             padding: const EdgeInsets.all(40),
             decoration: BoxDecoration(
-              color: const Color(0xFF111827).withOpacity(0.7),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.white.withOpacity(0.1)),
+              border: Border.all(color: Colors.black.withOpacity(0.05)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withOpacity(0.05),
                   blurRadius: 40,
                   offset: const Offset(0, 20),
                 ),
@@ -96,45 +96,42 @@ class _ColaboradorLoginPageState extends State<ColaboradorLoginPage> {
                 const Text(
                   'GRUPO RMTS',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF111827),
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2,
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   'Área do Colaborador',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(color: Color(0xFF6B7280), fontSize: 16),
                 ),
                 const SizedBox(height: 40),
 
                 // CPF/Matrícula
                 TextField(
                   controller: _loginController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.black87),
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
                       Icons.person_outline,
                       color: AppColors.goldAccent,
                     ),
-                    hintText: 'CPF / Matrícula',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                    hintText: 'CPF',
+                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.05),
+                    fillColor: Colors.black.withOpacity(0.02),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.black.withOpacity(0.1),
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.black.withOpacity(0.1),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -149,7 +146,7 @@ class _ColaboradorLoginPageState extends State<ColaboradorLoginPage> {
                 TextField(
                   controller: _senhaController,
                   obscureText: _obscureText,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.black87),
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
                       Icons.lock_outline,
@@ -160,25 +157,25 @@ class _ColaboradorLoginPageState extends State<ColaboradorLoginPage> {
                         _obscureText
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.black.withOpacity(0.3),
                       ),
                       onPressed: () =>
                           setState(() => _obscureText = !_obscureText),
                     ),
                     hintText: 'Senha',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.05),
+                    fillColor: Colors.black.withOpacity(0.02),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.black.withOpacity(0.1),
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.black.withOpacity(0.1),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -209,7 +206,7 @@ class _ColaboradorLoginPageState extends State<ColaboradorLoginPage> {
                             height: 24,
                             width: 24,
                             child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: Colors.white,
                               strokeWidth: 2,
                             ),
                           )
@@ -230,7 +227,7 @@ class _ColaboradorLoginPageState extends State<ColaboradorLoginPage> {
                   child: Text(
                     'Problemas com acesso? Fale com o RH',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.4),
+                      color: Colors.black.withOpacity(0.4),
                       fontSize: 14,
                     ),
                   ),

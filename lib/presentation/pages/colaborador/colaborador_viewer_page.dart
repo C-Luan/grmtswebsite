@@ -21,6 +21,7 @@ class _ColaboradorViewerPageState extends State<ColaboradorViewerPage> {
   final ContrachequeService _service = ContrachequeService();
   late String _viewId;
   bool _isSigning = false;
+  bool _showIframe = true;
 
   @override
   void initState() {
@@ -41,7 +42,9 @@ class _ColaboradorViewerPageState extends State<ColaboradorViewerPage> {
   }
 
   Future<void> _handleAssinar() async {
-    showDialog(
+    setState(() => _showIframe = false);
+
+    await showDialog(
       context: context,
       builder: (context) => AssinaturaDialog(
         titulo: '${widget.contracheque.mesExtenso} ${widget.contracheque.ano}',
@@ -74,17 +77,23 @@ class _ColaboradorViewerPageState extends State<ColaboradorViewerPage> {
         },
       ),
     );
+
+    if (mounted) {
+      setState(() => _showIframe = true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0F1E),
+      backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
         title: Text(
           '${widget.contracheque.mesExtenso} ${widget.contracheque.ano}',
         ),
-        backgroundColor: const Color(0xFF111827),
+        backgroundColor: const Color(0xFFFFFFFF),
+        foregroundColor: const Color(0xFF111827),
+        elevation: 0.5,
         actions: [
           IconButton(
             icon: const Icon(Icons.download_outlined),
@@ -117,7 +126,10 @@ class _ColaboradorViewerPageState extends State<ColaboradorViewerPage> {
           ? const Center(
               child: CircularProgressIndicator(color: AppColors.redMts),
             )
-          : HtmlElementView(viewType: _viewId),
+          : Offstage(
+              offstage: !_showIframe,
+              child: HtmlElementView(viewType: _viewId),
+            ),
     );
   }
 }

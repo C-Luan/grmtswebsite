@@ -21,12 +21,12 @@ class ContrachequeCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF111827),
+        color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: contracheque.abertoEm == null
               ? AppColors.redMts.withOpacity(0.3)
-              : Colors.white.withOpacity(0.05),
+              : Colors.black.withOpacity(0.05),
         ),
       ),
       child: Column(
@@ -38,7 +38,7 @@ class ContrachequeCard extends StatelessWidget {
               Text(
                 '${contracheque.mesExtenso} ${contracheque.ano}',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFF111827),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -58,7 +58,7 @@ class ContrachequeCard extends StatelessWidget {
           _buildStatus(
             Icons.cloud_upload_outlined,
             'Enviado em: ${contracheque.uploadadoEm != null ? dateFormat.format(contracheque.uploadadoEm!) : 'N/A'}',
-            Colors.white.withOpacity(0.5),
+            Colors.black.withOpacity(0.5),
           ),
           const SizedBox(height: 8),
           _buildStatus(
@@ -68,7 +68,7 @@ class ContrachequeCard extends StatelessWidget {
                 : 'Não aberto',
             contracheque.abertoEm != null
                 ? Colors.blue.withOpacity(0.8)
-                : Colors.white.withOpacity(0.5),
+                : Colors.black.withOpacity(0.5),
           ),
           const SizedBox(height: 8),
           _buildStatus(
@@ -80,7 +80,7 @@ class ContrachequeCard extends StatelessWidget {
                 ? Colors.green.withOpacity(0.8)
                 : Colors.orange.withOpacity(0.8),
           ),
-          const Spacer(),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
@@ -98,8 +98,8 @@ class ContrachequeCard extends StatelessWidget {
                     }
                   },
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    side: BorderSide(color: Colors.white.withOpacity(0.2)),
+                    foregroundColor: Color(0xFF111827),
+                    side: BorderSide(color: Colors.black.withOpacity(0.2)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -139,7 +139,13 @@ class ContrachequeCard extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: color),
         const SizedBox(width: 8),
-        Text(text, style: TextStyle(color: color, fontSize: 12)),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(color: color, fontSize: 12),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

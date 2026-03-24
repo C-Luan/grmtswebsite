@@ -10,6 +10,7 @@ import 'package:site_grupo_rmts/utils/api_client.dart';
 import '../../environments/environments.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:site_grupo_rmts/data/models/usuario_logado_model.dart';
 
 class AuthenticationService {
   static final AuthenticationService instance =
@@ -24,6 +25,13 @@ class AuthenticationService {
   String? refreshToken;
   DateTime? expiresAt;
   Map<String, dynamic>? user;
+
+  UsuarioLogadoModel? get usuarioLogado {
+    if (user != null) {
+      return UsuarioLogadoModel.fromJson(user!);
+    }
+    return null;
+  }
 
   // ==========================
   // 🔹 Inicialização (chamada no main)
@@ -46,6 +54,25 @@ class AuthenticationService {
     );
     if (response.data["accessToken"] != null) {
       await _saveSession(response.data);
+
+      // NOVO: Busca dados complementares do usuário após salvar o Token
+      try {
+        final userId =
+            response.data['user']?['uuid'] ??
+            response.data['user']?['id']?.toString();
+        if (userId != null) {
+          final userResponse = await getUsuario(userId.toString());
+          if (userResponse.data != null) {
+            user = userResponse.data;
+            log(user.toString());
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('userData', jsonEncode(user));
+          }
+        }
+      } catch (e) {
+        log('[auth] Erro ao buscar dados complementares do usuario: $e');
+      }
+
       scheduleAutoRefresh();
     }
 
@@ -59,7 +86,7 @@ class AuthenticationService {
     accessToken = data['accessToken'];
     refreshToken = data['refreshToken'];
     user = data['user'];
-    
+
     // Se o backend manda expiresIn em segundos
     if (data['expiresIn'] != null) {
       expiresAt = DateTime.now().add(Duration(seconds: data['expiresIn']));
@@ -83,12 +110,12 @@ class AuthenticationService {
     final prefs = await SharedPreferences.getInstance();
     accessToken = prefs.getString('accessToken');
     refreshToken = prefs.getString('refreshToken');
-    
+
     final userData = prefs.getString('userData');
     if (userData != null) {
       user = jsonDecode(userData);
     }
-    
+
     final expiresStr = prefs.getString('expiresAt');
     if (expiresStr != null) {
       expiresAt = DateTime.tryParse(expiresStr);
@@ -207,7 +234,7 @@ class AuthenticationService {
   // ==================================================
   Future<Response> getUsuario(String uuid) async {
     return await _http.get(
-      "${Environments.usuario}/$uuid",
+      "${Environments.usuario}/me",
       options: authorizedHeaders(),
     );
   }

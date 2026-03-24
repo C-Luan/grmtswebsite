@@ -26,7 +26,7 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
     _controller = SignatureController(
       penStrokeWidth: 3,
       penColor: Colors.black,
-      exportBackgroundColor: Colors.white,
+      exportBackgroundColor: Color(0xFF111827),
     );
   }
 
@@ -44,9 +44,9 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
       child: Container(
         width: 600,
         decoration: BoxDecoration(
-          color: const Color(0xFF111827),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          border: Border.all(color: Colors.black.withOpacity(0.1)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -68,7 +68,7 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
                       const Text(
                         'Assinar Contracheque',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Color(0xFF111827),
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -76,7 +76,7 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
                       Text(
                         widget.titulo,
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                           fontSize: 14,
                         ),
                       ),
@@ -85,13 +85,13 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
                   const Spacer(),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: Colors.white),
+                    icon: const Icon(Icons.close, color: Color(0xFF111827)),
                   ),
                 ],
               ),
             ),
 
-            const Divider(height: 1, color: Colors.white10),
+            const Divider(height: 1, color: Colors.black12),
 
             // Canvas
             Padding(
@@ -100,13 +100,14 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
                 children: [
                   const Text(
                     'Desenhe sua assinatura no campo abaixo',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: TextStyle(color: Colors.black54, fontSize: 14),
                   ),
                   const SizedBox(height: 16),
                   Container(
                     height: 250,
+                    width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xFF111827),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ClipRRect(
@@ -122,7 +123,7 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
               ),
             ),
 
-            const Divider(height: 1, color: Colors.white10),
+            const Divider(height: 1, color: Colors.black12),
 
             // Actions
             Padding(
@@ -177,7 +178,7 @@ class _AssinaturaDialogState extends State<AssinaturaDialog> {
               child: Text(
                 'Sua assinatura será registrada com data e hora atual.',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.black.withOpacity(0.3),
                   fontSize: 11,
                 ),
               ),

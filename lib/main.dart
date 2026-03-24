@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 import 'presentation/pages/home/home_page.dart';
@@ -19,6 +20,16 @@ void main() async {
   runApp(const RMTSApp());
 }
 
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+      };
+}
+
 class RMTSApp extends StatelessWidget {
   const RMTSApp({super.key});
 
@@ -28,6 +39,7 @@ class RMTSApp extends StatelessWidget {
       title: 'Grupo RMTS',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
+      scrollBehavior: MyCustomScrollBehavior(),
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
