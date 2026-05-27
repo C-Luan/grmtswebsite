@@ -31,26 +31,26 @@ class Footer extends StatelessWidget {
         vertical: isMobile ? 24 : 30,
         horizontal: isMobile ? 20 : 120,
       ),
-      child: isMobile ? _mobileLayout() : _desktopLayout(),
+      child: isMobile ? _mobileLayout(context) : _desktopLayout(context),
     );
   }
 
-  Widget _desktopLayout() {
+  Widget _desktopLayout(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _copyrightText(),
-        _linksRow(),
+        _linksRow(context),
       ],
     );
   }
 
-  Widget _mobileLayout() {
+  Widget _mobileLayout(BuildContext context) {
     return Column(
       children: [
         _copyrightText(),
         const SizedBox(height: 14),
-        _linksRow(),
+        _linksRow(context),
       ],
     );
   }
@@ -63,11 +63,16 @@ class Footer extends StatelessWidget {
         ),
       );
 
-  Widget _linksRow() => Row(
+  Widget _linksRow(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _FooterLink(
-            text: 'Fale comigo no WhatsApp',
+            text: 'Aviso de Privacidade',
+            onTap: () => Navigator.pushNamed(context, '/privacidade'),
+          ),
+          const SizedBox(width: 20),
+          _FooterLink(
+            text: 'Fale conosco no WhatsApp',
             onTap: _launchWhatsApp,
           ),
           const SizedBox(width: 20),

@@ -64,7 +64,6 @@ class AuthenticationService {
           final userResponse = await getUsuario(userId.toString());
           if (userResponse.data != null) {
             user = userResponse.data;
-            log(user.toString());
             final prefs = await SharedPreferences.getInstance();
             await prefs.setString('userData', jsonEncode(user));
           }

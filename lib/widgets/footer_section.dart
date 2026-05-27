@@ -185,7 +185,7 @@ class FoorterSection extends StatelessWidget {
 }
 
 class HoverContactItem extends StatefulWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String text;
   final Color color;
   final VoidCallback onTap;

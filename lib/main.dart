@@ -4,6 +4,7 @@ import 'core/theme/app_theme.dart';
 import 'presentation/pages/home/home_page.dart';
 import 'presentation/pages/colaborador/colaborador_login_page.dart';
 import 'presentation/pages/colaborador/colaborador_home_page.dart';
+import 'presentation/pages/privacidade/politica_privacidade_page.dart';
 
 import 'package:site_grupo_rmts/utils/api_client.dart';
 import 'package:site_grupo_rmts/services/login/authentication_service.dart';
@@ -43,6 +44,7 @@ class RMTSApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
+        '/privacidade': (context) => const PoliticaPrivacidadePage(),
         '/colaborador/login': (context) => const ColaboradorLoginPage(),
         '/colaborador/home': (context) => const ColaboradorHomePage(),
       },
